@@ -1,0 +1,96 @@
+Date,Time,Level,Source,Description,Value
+2025-04-03,16:56:43.801,FINE,data.ecu,02 Number of VIN items,1.0
+2025-04-03,16:56:43.802,FINE,data.ecu,02 Vehicle identification number,2T1BURHE8FC468221
+2025-04-03,16:56:44.180,FINE,data.ecu,04 Number of CAL-ID items,2.0
+2025-04-03,16:56:44.180,FINE,data.ecu,04 Calibration identifier,30Z58000
+2025-04-03,16:56:44.181,FINE,data.ecu,04 Calibration identifier 2,50206000
+2025-04-03,16:56:44.456,FINE,data.ecu,06 Calibration verification,44307482
+2025-04-03,16:56:44.812,FINE,data.ecu,08 OBD Monitoring Conditions Encountered Counts,5120.0
+2025-04-03,16:56:44.812,FINE,data.ecu,08 Ignition Counter,19972.0
+2025-04-03,16:56:44.813,FINE,data.ecu,08 Catalyst Monitor Completion Counts Bank 1,35072.0
+2025-04-03,16:56:44.813,FINE,data.ecu,08 Catalyst Monitor Conditions Encountered Counts Bank 1,16896.0
+2025-04-03,16:56:44.813,FINE,data.ecu,08 Catalyst Monitor Completion Counts Bank 2,19968.0
+2025-04-03,16:56:44.814,FINE,data.ecu,08 Catalyst Monitor Conditions Encountered Counts Bank 2,0.0
+2025-04-03,16:56:44.814,FINE,data.ecu,08 O2 Sensor Monitor Completion Counts Bank 1,0.0
+2025-04-03,16:56:44.814,FINE,data.ecu,08 O2 Sensor Monitor Conditions Encountered Counts Bank 1,45824.0
+2025-04-03,16:56:44.814,FINE,data.ecu,08 O2 Sensor Monitor Completion Counts Bank 2,19968.0
+2025-04-03,16:56:44.815,FINE,data.ecu,08 O2 Sensor Monitor Conditions Encountered Counts Bank 2,0.0
+2025-04-03,16:56:44.815,FINE,data.ecu,08 EGR and/or VVT Monitor Completion Condition Counts,1.0
+2025-04-03,16:56:44.815,FINE,data.ecu,08 EGR and/or VVT Monitor Conditions Encountered Counts,55808.0
+2025-04-03,16:56:44.816,FINE,data.ecu,08 AIR Monitor Completion Condition Counts (Secondary Air),19712.0
+2025-04-03,16:56:44.816,FINE,data.ecu,08 AIR Monitor Conditions Encountered Counts (Secondary Air),0.0
+2025-04-03,16:56:44.816,FINE,data.ecu,08 EVAP Monitor Completion Condition Counts,0.0
+2025-04-03,16:56:44.817,FINE,data.ecu,08 EVAP Monitor Conditions Encountered Counts,18176.0
+2025-04-03,16:56:44.817,FINE,data.ecu,08 Secondary O2 Sensor Monitor Completion Counts Bank 1,1280.0
+2025-04-03,16:56:44.817,FINE,data.ecu,08 Secondary O2 Sensor Monitor Conditions Encountered Counts Bank 1,8960.0
+2025-04-03,16:56:44.818,FINE,data.ecu,08 Secondary O2 Sensor Monitor Completion Counts Bank 2,19968.0
+2025-04-03,16:56:44.818,FINE,data.ecu,08 Secondary O2 Sensor Monitor Conditions Encountered Counts Bank 2,0.0
+2025-04-03,16:56:45.107,FINE,data.ecu,0A ECU name,ECM -EngineControl
+2025-04-03,16:56:45.397,FINE,data.ecu,02 Number of VIN items,1.0
+2025-04-03,16:56:45.397,FINE,data.ecu,02 Vehicle identification number,2T1BURHE8FC468221
+2025-04-03,16:58:01.476,FINE,data.ecu,01 Number of Fault Codes,0.0
+2025-04-03,16:58:01.479,FINE,data.ecu,01 MIL status,0
+2025-04-03,16:58:01.482,FINE,data.ecu,01 Misfire status,1
+2025-04-03,16:58:01.484,FINE,data.ecu,01 Fuel system test status,1
+2025-04-03,16:58:01.485,FINE,data.ecu,01 Component test status,1
+2025-04-03,16:58:01.486,FINE,data.ecu,01 Ignition monitoring status,0
+2025-04-03,16:58:01.487,FINE,data.ecu,01 Catalyst test status,256
+2025-04-03,16:58:01.488,FINE,data.ecu,01 Heated Cat / Nox Monitor test status,0
+2025-04-03,16:58:01.489,FINE,data.ecu,01 Evaporative system test status,256
+2025-04-03,16:58:01.490,FINE,data.ecu,01 Secondary air sys test status,0
+2025-04-03,16:58:01.493,FINE,data.ecu,01 A/C refrigerant test status,0
+2025-04-03,16:58:01.494,FINE,data.ecu,01 Oxygen Sensor test status,256
+2025-04-03,16:58:01.495,FINE,data.ecu,01 Oxygen Sensor Heater test status,256
+2025-04-03,16:58:01.497,FINE,data.ecu,01 EGR System test status,256
+2025-04-03,16:58:01.785,FINE,data.ecu,03 Fuel System 1 Status,2
+2025-04-03,16:58:01.786,FINE,data.ecu,03 Fuel System 2 Status,0
+2025-04-03,16:58:02.094,FINE,data.ecu,04 Calculated Load Value,32.941177 %
+2025-04-03,16:58:02.400,FINE,data.ecu,05 Coolant Temperature,98.0 °C
+2025-04-03,16:58:02.710,FINE,data.ecu,06 Short Term Fuel Trim (Bank 1),0.78125 %
+2025-04-03,16:58:03.002,FINE,data.ecu,07 Long Term Fuel Trim (Bank 1),-10.15625 %
+2025-04-03,16:58:03.297,FINE,data.ecu,0C Engine RPM,757.0 /min
+2025-04-03,16:58:03.584,FINE,data.ecu,0D Vehicle Speed,0.0 km/h
+2025-04-03,16:58:03.875,FINE,data.ecu,0E Timing Advance (Cyl. #1),9.5 °
+2025-04-03,16:58:04.144,FINE,data.ecu,0F Intake Air Temperature,62.0 °C
+2025-04-03,16:58:04.408,FINE,data.ecu,10 Air Flow Rate (MAF sensor),2.03 g/s
+2025-04-03,16:58:04.677,FINE,data.ecu,11 Absolute Throttle Position,16.470589 %
+2025-04-03,16:58:04.945,FINE,data.ecu,13 Oxygen sensors present,3
+2025-04-03,16:58:05.213,FINE,data.ecu,15 O2 Sensor Voltage B1S2,660.0 mV
+2025-04-03,16:58:05.214,FINE,data.ecu,15 O2 Sensor fuel trim B1S2,99.21875 %
+2025-04-03,16:58:05.475,FINE,data.ecu,1C OBD conforms to,1
+2025-04-03,16:58:05.713,FINE,data.ecu,1F Time Since Engine Start,0.500166666 h
+2025-04-03,16:58:05.950,FINE,data.ecu,21 Distance since MIL activated,0.0 km
+2025-04-03,16:58:06.196,FINE,data.ecu,24 O2 Sensor B1S1 lambda,1.0074311
+2025-04-03,16:58:06.197,FINE,data.ecu,24 O2 Sensor B1S1,3.3414817 V
+2025-04-03,16:58:06.427,FINE,data.ecu,2E Commanded Evaporative Purge,13.725491 %
+2025-04-03,16:58:06.656,FINE,data.ecu,30 Warm-ups since ECU reset,255.0
+2025-04-03,16:58:06.891,FINE,data.ecu,31 Distance since ECU reset,2882.0 km
+2025-04-03,16:58:07.104,FINE,data.ecu,33 Barometric Pressure (absolute),96.0 kPa
+2025-04-03,16:58:07.320,FINE,data.ecu,34 O2 Sensor 1 lambda,0.9990692
+2025-04-03,16:58:07.320,FINE,data.ecu,34 O2 Sensor 1 current,0.0 mA
+2025-04-03,16:58:07.526,FINE,data.ecu,3C CAT Temperature B1S1,452.1 °C
+2025-04-03,16:58:07.743,FINE,data.ecu,3E CAT Temperature B1S2,320.0 °C
+2025-04-03,16:58:07.940,FINE,data.ecu,41 Misfire status,1
+2025-04-03,16:58:07.941,FINE,data.ecu,41 Fuel system test status,1
+2025-04-03,16:58:07.942,FINE,data.ecu,41 Component test status,1
+2025-04-03,16:58:07.942,FINE,data.ecu,41 Ignition monitoring status,0
+2025-04-03,16:58:07.943,FINE,data.ecu,41 Catalyst test status,257
+2025-04-03,16:58:07.944,FINE,data.ecu,41 Heated Cat / Nox Monitor test status,0
+2025-04-03,16:58:07.945,FINE,data.ecu,41 Evaporative system test status,257
+2025-04-03,16:58:07.946,FINE,data.ecu,41 Secondary air sys test status,0
+2025-04-03,16:58:07.947,FINE,data.ecu,41 A/C refrigerant test status,0
+2025-04-03,16:58:07.947,FINE,data.ecu,41 Oxygen Sensor test status,257
+2025-04-03,16:58:07.948,FINE,data.ecu,41 Oxygen Sensor Heater test status,256
+2025-04-03,16:58:07.949,FINE,data.ecu,41 EGR System test status,257
+2025-04-03,16:58:08.129,FINE,data.ecu,42 ECU voltage,13.613 V
+2025-04-03,16:58:08.321,FINE,data.ecu,43 Absolute Engine Load,14.509804 %
+2025-04-03,16:58:08.503,FINE,data.ecu,44 Commanded Equivalence Ratio,99.957275 %
+2025-04-03,16:58:08.675,FINE,data.ecu,45 Relative Throttle Position,0.0 %
+2025-04-03,16:58:08.888,FINE,data.ecu,47 Absolute Throttle Position B,48.235294 %
+2025-04-03,16:58:09.068,FINE,data.ecu,49 Absolute Throttle Position D,16.078432 %
+2025-04-03,16:58:09.238,FINE,data.ecu,4A Absolute Throttle Position E,31.764706 %
+2025-04-03,16:58:09.402,FINE,data.ecu,4C Comm. Throttle Actuator Cntrl,16.470589 %
+2025-04-03,16:58:09.573,FINE,data.ecu,4D Engine running while MIL on,0.0 h
+2025-04-03,16:58:09.720,FINE,data.ecu,4E Time since DTCs cleared,2.9927778 h
+2025-04-03,16:58:09.898,FINE,data.ecu,51 Fuel type,1
+2025-04-03,16:58:10.035,FINE,data.ecu,53 Absolute Evap system Vapor Pressure,96.53 kPa
