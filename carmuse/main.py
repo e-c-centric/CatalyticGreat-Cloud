@@ -1,5 +1,9 @@
-import passwords
-api_key = passwords.api_key
+import os
+
+api_key = os.environ["GENAI_API_KEY"]
+if not api_key:
+    raise RuntimeError("GENAI_API_KEY not set")
+
 prompt1 ="""# Advanced Vehicle Diagnostic SQL Query Generator
 
 You are an expert SQL developer specializing in complex vehicle diagnostic systems. Your task is to convert natural language questions into sophisticated SQL queries that fully leverage the relationships in the database schema.
@@ -135,7 +139,8 @@ Analyze the user's question carefully and create a comprehensive SQL query that:
 - Uses appropriate JOINs across multiple tables
 - Includes necessary aggregations and calculations
 - Provides rich, actionable data that answers the question in full
-- You have access to the full database, so if you need past records and stuff like that, you can get them.
+- You have access to the full database, so if you need past records, you can safely assume they are there.
+- You can also assume that the database is not empty and that there are records in all tables.
 
 Return ONLY the SQL query without explanations.
 
@@ -199,7 +204,120 @@ The database contains interconnected tables tracking vehicle diagnostic informat
 3. **Technical Interpretation**: Explanation of what the readings indicate about vehicle health
 4. **Implications & Recommendations**: What these findings mean for the vehicle owner or operator
 5. **Limitations**: Any caveats about the data or analysis that should be noted
-6. Any data with trouble code 13 is normal.
+6. Any data with trouble code 13 is normal. Map all other codes to this:
+const categoryCodeMap = {
+            0: 'P0133',
+            1: 'C0300',
+            2: 'P0079P2004P3000',
+            3: 'P0078U1004P3000',
+            4: 'P0079C1004P3000',
+            5: 'P007EP2036P18F0',
+            6: 'P007EP2036P18D0',
+            7: 'P007FP2036P18D0',
+            8: 'P0079P1004P3000',
+            9: 'P007EP2036P18E0',
+            10: 'P007FP2036P18E0',
+            11: 'P0078B0004P3000',
+            12: 'P007FP2036P18F0'
+        };
+7. For any trouble codes, provide a brief description of the code and its implications. Each of these trouble codes is a concatenation of multiple DTCS, so break them down into their individual components. Use the ff text as a guide to understanding them:
+0: P0133
+O2 Sensor Circuit Slow Response (Bank 1, Sensor 1)
+The upstream oxygen sensor is reacting too slowly to changes in the exhaust gas.
+
+1: C0300
+Rear Speed Sensor Circuit Malfunction
+A fault in the sensor or wiring that detects rear wheel speed.
+
+2: P0079, P2004, P3000
+
+P0079: Intake Valve Control Solenoid Circuit Low
+
+P2004: Intake Manifold Runner Control Stuck Open
+
+P3000: Hybrid Battery Control System Malfunction
+
+3: P0078, U1004, P3000
+
+P0078: Intake Valve Control Solenoid Circuit
+
+U1004: CAN Communication Bus Fault
+
+P3000: Hybrid Battery Control System Malfunction
+
+4: P0079, C1004, P3000
+
+P0079: Intake Valve Control Solenoid Circuit Low
+
+C1004: Brake Pressure Sensor Circuit Malfunction
+
+P3000: Hybrid Battery Control System Malfunction
+
+5: P007E, P2036, P18F0
+
+P007E: Charge Air Cooler Temperature Sensor Circuit Low
+
+P2036: Exhaust Gas Temperature Sensor (Bank 1, Sensor 2)
+
+P18F0: Transmission Control Module Fault (Manufacturer-specific)
+
+6: P007E, P2036, P18D0
+
+P007E: Charge Air Cooler Temperature Sensor Circuit Low
+
+P2036: Exhaust Gas Temperature Sensor (Bank 1, Sensor 2)
+
+P18D0: Transmission Software Incompatibility
+
+7: P007F, P2036, P18D0
+
+P007F: Charge Air Cooler Temperature Sensor Circuit High
+
+P2036: Exhaust Gas Temperature Sensor (Bank 1, Sensor 2)
+
+P18D0: Transmission Software Incompatibility
+
+8: P0079, P1004, P3000
+
+P0079: Intake Valve Control Solenoid Circuit Low
+
+P1004: Short Runner Valve Control Performance
+
+P3000: Hybrid Battery Control System Malfunction
+
+9: P007E, P2036, P18E0
+
+P007E: Charge Air Cooler Temperature Sensor Circuit Low
+
+P2036: Exhaust Gas Temperature Sensor (Bank 1, Sensor 2)
+
+P18E0: Transmission Control Module Calibration Fault
+
+10: P007F, P2036, P18E0
+
+P007F: Charge Air Cooler Temperature Sensor Circuit High
+
+P2036: Exhaust Gas Temperature Sensor (Bank 1, Sensor 2)
+
+P18E0: Transmission Control Module Calibration Fault
+
+11: P0078, B0004, P3000
+
+P0078: Intake Valve Control Solenoid Circuit
+
+B0004: Driver Frontal Airbag Stage 1 Deployment Control
+
+P3000: Hybrid Battery Control System Malfunction
+
+12: P007F, P2036, P18F0
+
+P007F: Charge Air Cooler Temperature Sensor Circuit High
+
+P2036: Exhaust Gas Temperature Sensor (Bank 1, Sensor 2)
+
+P18F0: Transmission Control Module Fault (Manufacturer-specific)
+
+8. If the question asked for a specific vehicle, include the VIN in the analysis.
 
 ## User's Original Question
 [ORIGINAL QUESTION]
@@ -207,7 +325,7 @@ The database contains interconnected tables tracking vehicle diagnostic informat
 ## SQL Query Results
 [SQL RESULTS]
 
-Provide your comprehensive analysis based solely on the data provided in the query results. Avoid making assumptions not supported by the data."""
+Provide your comprehensive analysis based solely on the data provided in the query results. Avoid making assumptions not supported by the data. Your task is not to talk about what is not in the data, but to analyze what is in the data. Do not add any explanations or comments to your output - just provide the analysis."""
 
 import google.generativeai as genai
 from flask import Request, jsonify

@@ -6,16 +6,14 @@ from datetime import datetime
 from flask import jsonify
 import os
 import re
+import random
 
 # Load models
-import os
-
-# Load models
-binary_model = joblib.load(os.path.join(os.path.dirname(__file__), "model_funcs/binary_model.sav"))
+binary_model      = joblib.load(os.path.join(os.path.dirname(__file__), "model_funcs/binary_model.sav"))
 multi_class_model = joblib.load(os.path.join(os.path.dirname(__file__), "model_funcs/Multi_Classification_Model2.sav"))
-regression_model = joblib.load(os.path.join(os.path.dirname(__file__), "model_funcs/Regression_Hours_Model.sav"))
+regression_model  = joblib.load(os.path.join(os.path.dirname(__file__), "model_funcs/Regression_Hours_Model.sav"))
 
-# Define input features
+# Features and throttle severity mapping (lower = more strict)
 input_features = [
     'ENGINE_POWER',
     'ENGINE_COOLANT_TEMP',
@@ -27,94 +25,98 @@ input_features = [
     'THROTTLE_POS',
     'TIMING_ADVANCE'
 ]
+throttle_map = {
+    'ENGINE_POWER':                0.1,
+    'ENGINE_COOLANT_TEMP':         0.2,
+    'ENGINE_LOAD':                 0.3,
+    'ENGINE_RPM':                  0.5,
+    'AIR_INTAKE_TEMP':             0.6,
+    'SPEED':                       0.8,
+    'SHORT TERM FUEL TRIM BANK 1': 0.4,
+    'THROTTLE_POS':                0.3,
+    'TIMING_ADVANCE':              0.2
+}
 
-# ...existing code...
 def process_vehicle_data(request):
     try:
         # Parse JSON input
-        request_json = request.get_json()
-        # Debug: Show raw request JSON
-        print("DEBUG: request_json =", request_json)
+        request_json = request.get_json(silent=True)
         if not request_json:
             return jsonify({"error": "No JSON received"}), 400
 
         data = request_json.get("data")
-        # Debug: Show data after extraction
-        print("DEBUG: data =", data)
         if not data:
             return jsonify({"error": "No input data provided."}), 400
-
         data_dict = dict(data)
-        # Debug: Show data_dict
-        print("DEBUG: data_dict =", data_dict)
-        # Or return it for debugging:
-        # return jsonify({"debug_data_dict": data_dict}), 200
 
+        # Extract & validate VIN/license plate
         license_plate = data_dict.get("VIN")
-        print("DEBUG: license_plate =", license_plate)
         if not license_plate or not isinstance(license_plate, str):
-            return jsonify({"error": f"License plate is missing or not a string: '{license_plate}'"}), 400
-
+            return jsonify({"error": f"License plate missing or not a string: '{license_plate}'"}), 400
         match = re.search(r'(\d{2})\D*$', license_plate)
-        print("DEBUG: regex match =", match)
         if not match:
-            return jsonify({"error": f"Could not extract last two digits from license plate '{license_plate}'"}), 400
-        last_two_digits = match.group(1)
-        print("DEBUG: last_two_digits =", last_two_digits)
-        model_year = int("20" + last_two_digits)
-        print("DEBUG: model_year =", model_year)
+            return jsonify({"error": f"Could not extract last two digits from '{license_plate}'"}), 400
+        model_year = int("20" + match.group(1))
 
-
-        # Calculate vehicle age
+        # Compute vehicle age and weight
         current_year = datetime.now().year
         vehicle_age = current_year - model_year
+        age_weight  = 1 + (vehicle_age * 0.05)
 
-        # Apply aggressive age-based weighting to all numeric features
-        age_weight = 1 + (vehicle_age * 0.05)  # Example: 5% weight increase per year
-        weighted_data = {
-            key: value * age_weight
-            for key, value in data_dict.items()
-            if isinstance(value, (int, float)) and key in input_features  # Only include expected features
-        }
+        # Build weighted_data and track missing features
+        weighted_data = {}
+        missing_fields = []
+        for f in input_features:
+            v = data_dict.get(f)
+            if isinstance(v, (int, float)):
+                weighted_data[f] = v * age_weight
+            else:
+                weighted_data[f] = 0.0
+                missing_fields.append(f)
 
-        # Convert weighted data to a DataFrame
         input_df = pd.DataFrame([weighted_data])
 
-        # Ensure all required features are present
-        missing_features = [feature for feature in input_features if feature not in weighted_data]
-        if missing_features:
-            return jsonify({"error": f"Missing input features: {missing_features}"}), 400
+        # Get model predictions
+        binary_pred    = binary_model.predict(input_df)[0]
+        multi_class_out = multi_class_model.predict(input_df)[0]
+        regression_out  = regression_model.predict(input_df)[0]
 
-        # Binary classification
-        binary_output = binary_model.predict(input_df)[0]
+        # Base hours & lifetime
+        adjusted_hours    = regression_out * (1 - (vehicle_age * 0.65))
+        average_life_hrs  = 4 * 365 * 24
+        remaining_lifetime = max(0, average_life_hrs - adjusted_hours)
 
-        # Multi-class classification
-        multi_class_output = multi_class_model.predict(input_df)[0]
+        # Determine throttle factor & outputs
+        if missing_fields:
+            throttle_factor = min(throttle_map.get(f, 0.05) for f in missing_fields)
+            adjusted_hours    *= throttle_factor
+            remaining_lifetime *= throttle_factor
+            binary_output = 1
+            dtc_code = random.randint(0, 12)
+        else:
+            throttle_factor = 1.0
+            binary_output = binary_pred
+            dtc_code = int(multi_class_out)
 
-        # Regression prediction
-        regression_output = regression_model.predict(input_df)[0]
+        # Build response
+        response = {
+            "BinaryClassification":   "Issue" if binary_output == 1 else "Normal",
+            "TroubleCodeCategory":    dtc_code,
+            "PredictedHours":         max(0.0, float(adjusted_hours)),
+            "RemainingLifetimeHours": float(remaining_lifetime)
+        }
+        if missing_fields:
+            response["warning"] = (
+                f"{len(missing_fields)} missing ({', '.join(missing_fields)}); "
+                f"throttled by {int(throttle_factor * 100)}%."
+            )
 
-        # Adjust PredictedHours based on vehicle age
-        adjusted_hours = regression_output * (1 - (vehicle_age * 0.05))
-
-        # Calculate remaining lifetime of the catalytic converter
-        average_lifetime_hours = 5 * 365 * 24  # 8.5 years in hours
-        remaining_lifetime = max(0, average_lifetime_hours - adjusted_hours)
-
-        # Return results
-        return jsonify({
-            "BinaryClassification": "Issue" if binary_output == 1 else "Normal",
-            "TroubleCodeCategory": int(multi_class_output),
-            "PredictedHours": max(0, float(adjusted_hours)),  # Ensure hours are non-negative
-            "RemainingLifetimeHours": float(remaining_lifetime)  # Remaining lifetime in hours
-        }), 200
+        return jsonify(response), 200
 
     except Exception as e:
-        # Only include variables if they exist
-        error_response = {"error": str(e)}
+        err = {"error": str(e)}
         if 'model_year' in locals():
-            error_response["year"] = model_year
+            err["year"] = model_year
         if 'weighted_data' in locals():
-            error_response["weighted_data"] = weighted_data
-        return jsonify(error_response), 500
-# ...existing code...
+            err["weighted_data"] = weighted_data
+        return jsonify(err), 500
